@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Визитка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0e0f11;
+    --surface: #16181b;
+    --surface-2: #1e2125;
+    --text: #e6e8eb;
+    --muted: #8b929a;
+    --border: #2a2e33;
+    --online: #4caf7d;
+    --online-bg: #14231b;
+    --offline: #7d848c;
+    --offline-bg: #1a1c1f;
+    --accent: #c8a96a;
+    --accent-text: #0e0f11;
+    --work: #5b6b7d;
+    --font-head: "Unbounded", system-ui, sans-serif;
+    --font-body: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    padding: max(48px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(48px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  main { max-width: 680px; margin: 0 auto; display: grid; gap: 14px; }
+  header { padding: 0 2px 22px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  h1 {
+    font-family: var(--font-head);
+    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    margin: 0 0 8px;
+    font-weight: 500;
+    letter-spacing: .01em;
+    line-height: 1.15;
+  }
+  .role { margin: 0; color: var(--accent); font-family: var(--font-mono); font-size: .98rem; letter-spacing: .14em; text-transform: uppercase; }
+
+  .tagline { margin: 14px 0 0; text-align: center; color: var(--text); font-size: 1.05rem; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 22px;
+  }
+
+  #status-card { transition: background-color .6s ease, border-color .6s ease; }
+  #status-card.online { background: var(--online-bg); border-color: color-mix(in srgb, var(--online) 40%, var(--border)); }
+  #status-card.offline { background: var(--offline-bg); }
+  .status-head { display: flex; align-items: center; gap: 12px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--offline); flex: none; }
+  .online .dot { background: var(--online); animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--online) 55%, transparent); }
+    70% { box-shadow: 0 0 0 8px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  #status-title { font-family: var(--font-head); font-size: 1.05rem; font-weight: 500; margin: 0; }
+  #status-note { margin: 10px 0 0; color: var(--muted); }
+
+  .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .week li { text-align: center; padding: 8px 0; border-radius: 3px; background: var(--surface-2); color: var(--muted); font-family: var(--font-mono); font-size: .8rem; border: 1px solid transparent; }
+  .week li.work { background: var(--work); color: #fff; }
+  .week li.today { border-color: var(--accent); color: var(--text); box-shadow: inset 0 0 0 1px var(--accent); }
+  #schedule-text { margin: 0; color: var(--muted); }
+
+  h2 { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .phone { display: block; font-family: var(--font-head); font-size: clamp(1.2rem, 5.5vw, 1.6rem); color: var(--text); text-decoration: none; font-weight: 500; margin-bottom: 16px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { font: inherit; font-weight: 500; padding: 11px 20px; border-radius: 4px; border: 1px solid var(--accent); cursor: pointer; text-decoration: none; background: var(--accent); color: var(--accent-text); transition: background-color .15s ease, border-color .15s ease; }
+  .btn:hover { background: color-mix(in srgb, var(--accent) 85%, #fff); }
+  .btn.secondary { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn.secondary:hover { border-color: var(--muted); background: var(--surface-2); }
+  .btn:focus-visible, .phone:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  #copy-msg { color: var(--muted); font-size: .9rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot { animation: none !important; }
+    #status-card, .btn { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="name">VibeCode это круто!</h1>
+    <p class="role" id="role">VibeCoder</p>
+    <p class="tagline" id="tagline">Спасибо Любовь и Команда Казактелеком за классный мастер класс</p>
+  </header>
+
+  <section class="card" id="status-card">
+    <div aria-live="polite">
+      <div class="status-head">
+        <span class="dot" aria-hidden="true"></span>
+        <h2 id="status-title" style="margin:0">…</h2>
+      </div>
+      <p id="status-note"></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Кесте</h2>
+    <ul class="week" id="week" aria-label="Жұмыс күндері"></ul>
+    <p id="schedule-text">Дүйсенбіден жұмаға дейін, сағат 10:00-ден 18:00-ге дейін жұмыс істеймін</p>
+  </section>
+
+  <section class="card">
+    <h2>Байланыс</h2>
+    <a class="phone" id="phone" href="#"></a>
+    <div class="actions">
+      <a class="btn" id="call" href="#">Қоңырау шалу</a>
+      <button class="btn secondary" id="copy" type="button">Нөмірді көшіру</button>
+      <span id="copy-msg" role="status"></span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const CONFIG = {
+  name: "Данияр",
+  headline: "VibeCode это круто!",
+  tagline: "Спасибо Любовь и Команда Казактелеком за классный мастер класс",
+  role: "VibeCoder",
+  timeZone: "Asia/Almaty",
+  startHour: 10,
+  endHour: 18,
+  workDays: [1, 2, 3, 4, 5], // 0 = Вс, 1 = Пн ... 6 = Сб
+  phoneDisplay: "165",
+  phoneTel: "165",
+};
+
+const $ = id => document.getElementById(id);
+const DAY_SHORT = ["Жс", "Дс", "Сс", "Ср", "Бс", "Жм", "Сб"];
+const DAY_LOC = ["жексенбіде", "дүйсенбіде", "сейсенбіде", "сәрсенбіде", "бейсенбіде", "жұмада", "сенбіде"];
+const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
+const pad = n => String(n).padStart(2, "0");
+
+const fmt = new Intl.DateTimeFormat("en-US", {
+  timeZone: CONFIG.timeZone, weekday: "short", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+});
+const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
+function nowInZone() {
+  const p = {};
+  for (const part of fmt.formatToParts(new Date())) p[part.type] = part.value;
+  return { day: WD[p.weekday], h: +p.hour, m: +p.minute, s: +p.second };
+}
+
+function formatLeft(sec) {
+  const mins = Math.max(0, Math.floor(sec / 60));
+  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), m = mins % 60;
+  if (d > 0) return `${d} күн ${h} сағ`;
+  if (h > 0) return `${h} сағ ${m} мин`;
+  return `${m} мин`;
+}
+
+function compute(t) {
+  const secNow = t.h * 3600 + t.m * 60 + t.s;
+  const start = CONFIG.startHour * 3600, end = CONFIG.endHour * 3600;
+  const workDay = CONFIG.workDays.includes(t.day);
+  if (!CONFIG.workDays.length) return { empty: true };
+  if (workDay && secNow >= start && secNow < end) {
+    return { online: true, left: end - secNow };
+  }
+  for (let add = 0; add <= 7; add++) {
+    const day = (t.day + add) % 7;
+    if (!CONFIG.workDays.includes(day)) continue;
+    if (add === 0 && secNow >= start) continue;
+    return { online: false, days: add, day, left: add * 86400 + start - secNow };
+  }
+  return { empty: true };
+}
+
+function render() {
+  const t = nowInZone();
+  const st = compute(t);
+  const card = $("status-card");
+
+  let title, note;
+  if (st.empty) {
+    title = "Жұмыс күндері көрсетілмеген"; note = "";
+    card.className = "card offline";
+  } else if (st.online) {
+    title = "Қазір байланыстамын";
+    note = `Сағат ${CONFIG.endHour}:00-ге дейін жұмыс істеймін, қалды: ${formatLeft(st.left)}`;
+    card.className = "card online";
+  } else {
+    title = "Қазір жұмыс істемеймін";
+    const when = st.days === 0 ? "бүгін" : st.days === 1 ? "ертең" : DAY_LOC[st.day];
+    note = `${when[0].toUpperCase() + when.slice(1)} сағат ${CONFIG.startHour}:00-де жауап беремін, қалды: ${formatLeft(st.left)}`;
+    card.className = "card offline";
+  }
+  $("status-title").textContent = title;
+  $("status-note").textContent = note;
+  document.title = (st.online ? "Байланыста: " : "Желіде жоқ: ") + CONFIG.name;
+
+  [...$("week").children].forEach(li => li.classList.toggle("today", +li.dataset.day === t.day));
+}
+
+function init() {
+  $("name").textContent = CONFIG.headline;
+  $("tagline").textContent = CONFIG.tagline;
+  $("role").textContent = CONFIG.role;
+  $("phone").textContent = CONFIG.phoneDisplay;
+  $("phone").href = $("call").href = "tel:" + CONFIG.phoneTel;
+
+  $("week").innerHTML = WEEK_ORDER.map(d =>
+    `<li data-day="${d}" class="${CONFIG.workDays.includes(d) ? "work" : ""}">${DAY_SHORT[d]}</li>`).join("");
+
+  $("copy").addEventListener("click", async () => {
+    const msg = $("copy-msg");
+    try {
+      await navigator.clipboard.writeText(CONFIG.phoneDisplay);
+      msg.textContent = "Көшірілді";
+    } catch {
+      msg.textContent = "Көшіру мүмкін болмады, нөмірді қолмен белгілеңіз";
+    }
+    setTimeout(() => (msg.textContent = ""), 2500);
+  });
+
+  render();
+  setInterval(render, 1000);
+}
+init();
+</script>
+</body>
+</html>
